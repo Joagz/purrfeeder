@@ -99,3 +99,41 @@ select:active {
 .title {
     width: 100%;
 }
+
+.time_li {
+    list-style: none;
+    font-size: 1.4em;
+    font-weight: 600;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-direction: row-reverse;
+}
+
+.feeding_time_list{
+    display: flex;
+    flex-direction: column;
+    margin: 0;
+    padding: 0;
+    padding: 1em 0;
+    gap: 1em;
+}
+
+.delete_btn {
+    font-size: .7em;
+    width: auto;
+    background-color: rgb(255, 93, 93);
+    color: #000;
+    
+    border-top: 1px solid black;
+    border-left: 1px solid black;
+    border-bottom: 3px solid black;
+    border-right: 3px solid black;
+}
+
+.delete_btn:active {
+    border-top: 3px solid black;
+    border-left: 3px solid black;
+    border-bottom: 1px solid black;
+    border-right: 1px solid black;
+}

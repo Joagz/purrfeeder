@@ -67,12 +67,17 @@
     function btn_add_event() {
         const feedlist = document.getElementById("feedlist");
         const node = document.createElement("li");
+        const delete_btn = document.createElement("button");
+        node.className = "time_li";
+
+        delete_btn.className = "delete_btn";
+        delete_btn.innerHTML = "Eliminar";
+
+        node.appendChild(delete_btn);
 
         const minute_select = document.getElementById("minute");
         const hour_select = document.getElementById("hour");
-
         const textNode = document.createTextNode(hour_select.value + ":" + minute_select.value);
-
 
         node.appendChild(textNode);
         feedlist.appendChild(node);
