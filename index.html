@@ -71,8 +71,11 @@
     // Obtener el contenedor de la lista y el elemento a eliminar
     const feedlist = document.getElementById("feedlist");
     const el = document.getElementById(htmlid);
+   
+    // Remover elemento de la lista de repetidos
     current_vals.splice(current_vals.findIndex((found) => found == time), 1);
     id--;
+
     // Eliminar el elemento de la lista
     feedlist.removeChild(el);
   }
