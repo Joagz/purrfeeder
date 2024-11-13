@@ -195,7 +195,6 @@ void setup() {
     return;
   }
 
-
   WiFi.softAP(AP_SSID, AP_PASS);
   delay(100);
   WiFi.softAPConfig(PageIP, gateway, subnet);
@@ -206,13 +205,8 @@ void setup() {
 
   server.begin();
 
-
-
-
   listDir(LittleFS, "./", 2);
   readFile(LittleFS, "./index.html");
-  
-
 
   server.send(200, "text/html", "");
 }
