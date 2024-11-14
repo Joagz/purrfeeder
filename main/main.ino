@@ -32,32 +32,47 @@ void UpdateTime() {
   server.send(200, "text/html", "updated!");
 }
 
+String formatTime(String time) {
+  int hour = time.substring(0, time.indexOf(":")).toInt();
+  int minute = time.substring(time.indexOf(":") + 1).toInt();
+  
+  // Ensure 2-digit format for hours and minutes
+  char formattedTime[6];  // HH:MM format requires 5 chars + 1 for '\0'
+  snprintf(formattedTime, sizeof(formattedTime), "%02d:%02d", hour, minute);
+  
+  return String(formattedTime);  // Return the formatted string
+}
+
 void DeleteTime() {
-  String time = server.arg("VAL");
+  String time = server.arg("VAL");  // Get the time from the server
+  time = formatTime(time);  // Format the time to HH:MM
 
   std::vector<String> time_list = traverseArray(TIME_ARR);
-  Serial.println(time);
-  auto it = std::find(time_list.begin(), time_list.end(), time);
+  Serial.println("Deleting time: " + time);
 
+  auto it = std::find(time_list.begin(), time_list.end(), time);
   if (it != time_list.end()) {
     Serial.println("Element found and erased");
-
     time_list.erase(it);
   } else {
     Serial.println("Element not found");
   }
 
-
-  char temp[256];
+  // Prepare a temporary buffer to store the updated array
+  char temp[256] = { 0 };
+  size_t offset = 0;
   for (auto& v : time_list) {
-    if (v.length() != 5) continue;
-    addElementToArray(temp, v);
+    if (v.length() >= 4) {
+      size_t len = v.length();
+      v=formatTime(v);
+      addElementToArray(temp, v);
+    }
   }
 
-  memcpy(TIME_ARR, temp, 256);
-
+  memcpy(TIME_ARR, temp, sizeof(temp));
   server.send(200, "text/html", "updated!");
 }
+
 
 char* addElementToArray(char* arrayStr, const String& newElement) {
   String arrayString(arrayStr);
