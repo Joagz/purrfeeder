@@ -69,19 +69,55 @@ const char PAGE_MAIN[] PROGMEM = R"=====(
   var id = 0;
   var current_vals = [];
 
+  function add_time(current_time) {
+    // Agregar el tiempo actual a la lista de valores
+    current_vals.push(current_time);
+
+    // Crear los elementos HTML para la nueva lista
+    const feedlist = document.getElementById("feedlist");
+    const node = document.createElement("li");
+    const delete_btn = document.createElement("button");
+
+    // Asignar atributos a los elementos
+    node.className = "time_li";
+    node.id = "time_li_" + id;
+    id++; // Incrementar el id para el próximo elemento
+
+    delete_btn.className = "delete_btn";
+    delete_btn.innerHTML = "Eliminar";
+
+    // Agregar el evento al botón de eliminar
+    delete_btn.addEventListener("click", () => {
+      delete_list_el(node.id, current_time);
+    });
+
+    // Añadir el botón de eliminar y el texto con la hora al nodo de la lista
+    node.appendChild(delete_btn);
+    const textNode = document.createTextNode(current_time);
+    node.appendChild(textNode);
+
+    // Añadir el nuevo nodo a la lista en el HTML
+    feedlist.appendChild(node);
+  }
+
   function get_time_data() {
     var xhttp = new XMLHttpRequest();
     xhttp.open("GET", "/timedata")
-    xhttp.send();
 
     xhttp.onload = function () {
-      if (xhr.status != 200) { 
-        alert(`Error ${xhr.status}: ${xhr.statusText}`);
-      } else { 
-        alert(`Hecho, obtenidos ${xhr.response.length} bytes`); 
+      if (xhttp.status != 200) {
+        console.log(`Error ${xhttp.status}: ${xhttp.statusText}`);
+      } else {
+        const time_list = JSON.parse(xhttp.response);
+
+        time_list.map((time) => {
+          add_time(time);
+        })
+
       }
     };
 
+    xhttp.send();
   }
 
   function get_current_time() {
@@ -106,7 +142,7 @@ const char PAGE_MAIN[] PROGMEM = R"=====(
     // Obtener el contenedor de la lista y el elemento a eliminar
     const feedlist = document.getElementById("feedlist");
     const el = document.getElementById(htmlid);
-
+    console.log("Deleting: "+time);
     // Remover elemento de la lista de repetidos
     current_vals.splice(current_vals.findIndex((found) => found == time), 1);
     id--;
@@ -115,7 +151,7 @@ const char PAGE_MAIN[] PROGMEM = R"=====(
     feedlist.removeChild(el);
 
     var xhttp = new XMLHttpRequest();
-    xhttp.open("PUT", "/delete?VAL="+time);
+    xhttp.open("PUT", "/delete?VAL="+time)
     xhttp.send();
 
   }
@@ -164,6 +200,8 @@ const char PAGE_MAIN[] PROGMEM = R"=====(
     feedlist.appendChild(node);
     send_time();
   }
+
+  get_time_data();
 
   // Asociar el evento del botón de agregar con la función
   var btn_add = document.getElementById("btn_add");
@@ -313,6 +351,7 @@ const char PAGE_MAIN[] PROGMEM = R"=====(
   }
 </style>
 
-</html>)=====";
+</html>
+)=====";
 
 #endif

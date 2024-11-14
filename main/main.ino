@@ -3,6 +3,7 @@
 #include <LittleFS.h>
 #include <vector>
 #include "page.h"
+
 #define AP_SSID "PurrFeeder_AP"
 #define AP_PASS "purrfeeder"
 
@@ -21,6 +22,11 @@ std::vector<String> traverseArray(char* arrayStr);
 
 void SendWebsite() {
   server.send(200, "text/html", PAGE_MAIN);
+}
+
+void GetTimeList()
+{
+  server.send(200, "application/json", TIME_ARR);
 }
 
 void UpdateTime() {
@@ -70,9 +76,9 @@ void DeleteTime() {
   }
 
   memcpy(TIME_ARR, temp, sizeof(temp));
+  Serial.println(TIME_ARR);
   server.send(200, "text/html", "updated!");
 }
-
 
 char* addElementToArray(char* arrayStr, const String& newElement) {
   String arrayString(arrayStr);
@@ -134,11 +140,12 @@ void setup() {
   Serial.println(Actual_IP);
 
   server.on("/time", UpdateTime);
+  server.on("/timedata", GetTimeList);
   server.on("/delete", DeleteTime);
   server.on("/", SendWebsite);
+
   server.begin();
 }
-
 
 void loop() {
   server.handleClient();
