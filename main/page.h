@@ -1,3 +1,7 @@
+#ifndef PAGE_H
+#define PAGE_H
+
+const char PAGE_MAIN[] PROGMEM = R"=====(
 <!DOCTYPE html>
 <html lang="en">
 
@@ -111,7 +115,7 @@
     feedlist.removeChild(el);
 
     var xhttp = new XMLHttpRequest();
-    xhttp.open("PUT", "/delete")
+    xhttp.open("PUT", "/delete?VAL="+time);
     xhttp.send();
 
   }
@@ -309,4 +313,6 @@
   }
 </style>
 
-</html>
+</html>)=====";
+
+#endif
